@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SHARE_VOLUME="/output"
+mkdir -p "$SHARE_VOLUME"
+
 OVPN_CONF="profile_rendered.ovpn"
 sed -E 's/auth-user-pass|auth-federate|auth-retry interact|remote-random-hostname//g' profile.ovpn > "$OVPN_CONF"
 
@@ -25,6 +28,7 @@ echo
 echo "$URL"
 echo
 echo
+echo "$URL" > "$SHARE_VOLUME/url.txt"
 
 ./go_server
 
