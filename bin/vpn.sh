@@ -59,11 +59,14 @@ fi
 > "$url_file"
 url=""
 
+# cannot use --net host because it doesnt work on macos
+#--net host
 docker run \
     --rm \
     --name "$container_name" \
     -d \
-    --net host \
+    -p 35001:35001 \
+    -v $(pwd)/entrypoint.sh:/opt/openvpn/entrypoint.sh \
     -v "$ovpn_file:/opt/openvpn/profile.ovpn:ro" \
     -v "$local_tmp:/output" \
     --device /dev/net/tun:/dev/net/tun \
@@ -77,4 +80,8 @@ while [[ -z "$url" ]]; do
     url=$(cat "$url_file")
     sleep 1
 done
-xdg-open "$url" 2>/dev/null || open "$url" 2>/dev/null || echo "Please open $url in your browser."
+_open=$(command -v xdg-open)
+if [[ -z "$_open" ]]; then
+    _open=$(command -v open)
+fi
+$_open "$url" 2>/dev/null || open "$url" 2>/dev/null || echo "Please open $url in your browser."

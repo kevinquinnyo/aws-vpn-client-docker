@@ -36,7 +36,7 @@ func main() {
 		}
 	})
 
-	server := &http.Server{Addr: ":35001"}
+    server := &http.Server{Addr: "0.0.0.0:35001"}
 	go func() {
 		err := server.ListenAndServe()
 		if err != http.ErrServerClosed {

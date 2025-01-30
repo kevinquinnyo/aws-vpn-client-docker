@@ -7,6 +7,7 @@ OVPN_CONF="profile_rendered.ovpn"
 sed -E 's/auth-user-pass|auth-federate|auth-retry interact|remote-random-hostname//g' profile.ovpn > "$OVPN_CONF"
 
 VPN_HOST=$(cat "$OVPN_CONF" | grep 'remote ' | awk '{ print $2}')
+echo "VPN_HOST: $VPN_HOST"
 PORT=443
 
 RAND=$(openssl rand -hex 12)
@@ -20,6 +21,8 @@ OVPN_OUT=$(./openvpn-bin --config "$OVPN_CONF" --verb 3 \
      --auth-user-pass <( printf "%s\n%s\n" "N/A" "ACS::35001" ) | grep AUTH_FAILED,CRV1)
 
 URL=$(echo "$OVPN_OUT" | grep -Eo 'https://.+')
+echo "URL: $URL"
+echo "SHARE VOLUME: $SHARE_VOLUME"
 
 echo
 echo
